@@ -49,12 +49,12 @@ async function run() {
 
 
     //Subcategory route
-    app.get("/all-toys", async (req, res) => {
-      console.log(req.query?.subCategoory);
+    app.get("/sub-cat", async (req, res) => {
+      console.log(req.query?.subCategory);
 
       let query = {};
-      if (req.query?.subCategoory) {
-        query = { subCategoory: req.query.subCategoory };
+      if (req.query?.subCategory) {
+        query = { subCategory: req.query.subCategory };
       }
       const cursor = toysCollection.find(query);
       const result = await cursor.toArray();
