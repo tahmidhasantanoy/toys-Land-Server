@@ -70,26 +70,51 @@ async function run() {
       res.send(result);
     });
 
+    //Get for update
+    app.get("/all-toys/:update_id", async (req, res) => {
+      const id = req.params.update_id;
+      const query = { _id: new ObjectId(id) };
+      const result = await toysCollection.findOne(query);
+      res.send(result);
+    });
+
     // Upload toys data
     app.post("/all-toys", async (req, res) => {
       const addToyData = req.body;
       // console.log(addToyData);
-
-      //countinue
-      // app.patch("/all-toys/:id", (req, res) => {
-      //   const updateToy = req.body;
-      //   // console.log(updateToy);
-      // });
-
-      //delete || not working
-  
 
       //server to db
       const result = await toysCollection.insertOne(addToyData);
       res.send(result);
     });
 
+    //countinue
+    app.put("/all-toys/:update_id", async (req, res) => {
+      const id = req.params.update_id;
 
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateToyInfo = req.body;
+      const updateDoc = {
+        $set: {
+          name: updateToyInfo.name,
+          SellerName: updateToyInfo.SellerName,
+          email: updateToyInfo.email,
+          price: updateToyInfo.price,
+          subCategory: updateToyInfo.subCategory,
+          rating: updateToyInfo.rating,
+          quantity: updateToyInfo.quantity,
+          photoUrl: updateToyInfo.photoUrl,
+          description: updateToyInfo.description,
+          toyName: updateToyInfo.toyName,
+        },
+      };
+
+      const result = await toysCollection.updateOne(filter, updateDoc, options);
+      res.send(result);
+    });
+
+    //Delete
     app.delete("/all-toys/:id", async (req, res) => {
       const delete_id = req.params.id;
       console.log(delete_id);
