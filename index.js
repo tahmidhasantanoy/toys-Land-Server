@@ -34,13 +34,10 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const cursor = await toysCollection.findOne(query);
       console.log(cursor);
-      // const result = await cursor.toArray();
       res.send(cursor);
     });
 
-    //Get specific user(email) data
     app.get("/all-toys", async (req, res) => {
-      // console.log(req.query.email);
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email };
@@ -52,7 +49,6 @@ async function run() {
 
     //Subcategory route
     app.get("/sub-cat", async (req, res) => {
-      // console.log(req.query?.subCategory);
 
       let query = {};
       if (req.query?.subCategory) {
@@ -81,7 +77,6 @@ async function run() {
     // Upload toys data
     app.post("/all-toys", async (req, res) => {
       const addToyData = req.body;
-      // console.log(addToyData);
 
       //server to db
       const result = await toysCollection.insertOne(addToyData);
