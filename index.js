@@ -29,19 +29,32 @@ async function run() {
 
     // app.get("/all-toys", async (req, res) => {
     //   console.log(req.query.email);
- 
+
     //   const cursor = toysCollection.find();
     //   const result = await cursor.toArray();
     //   res.send(result);
     // });
 
-
     //Get specific user data
     app.get("/all-toys", async (req, res) => {
       console.log(req.query.email);
-      let query = {}
-      if(req.query?.email){
-        query = {email : req.query.email}
+      let query = {};
+      if (req.query?.email) {
+        query = { email: req.query.email };
+      }
+      const cursor = toysCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+
+    //Subcategory route
+    app.get("/all-toys", async (req, res) => {
+      console.log(req.query?.subCategoory);
+
+      let query = {};
+      if (req.query?.subCategoory) {
+        query = { subCategoory: req.query.subCategoory };
       }
       const cursor = toysCollection.find(query);
       const result = await cursor.toArray();
