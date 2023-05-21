@@ -8,7 +8,7 @@ const port = process.env.PORT || 5000;
 app.use(cors()); //cors policy
 app.use(express.json()); //req body parser
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.oc9fgut.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -27,17 +27,20 @@ async function run() {
 
     const toysCollection = client.db("toys-land").collection("all-toys");
 
-    // app.get("/all-toys", async (req, res) => {
-    //   console.log(req.query.email);
+    // test
+    app.get("/all-toys/:id", async (req, res) => {
+      console.log(req.params.id);
+      const id = req.params?.id;
+      const query = { _id: new ObjectId(id) };
+      const cursor = await toysCollection.findOne(query);
+      console.log(cursor);
+      // const result = await cursor.toArray();
+      res.send(cursor);
+    });
 
-    //   const cursor = toysCollection.find();
-    //   const result = await cursor.toArray();
-    //   res.send(result);
-    // });
-
-    //Get specific user data
+    //Get specific user(email) data
     app.get("/all-toys", async (req, res) => {
-      console.log(req.query.email);
+      // console.log(req.query.email);
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email };
@@ -47,10 +50,9 @@ async function run() {
       res.send(result);
     });
 
-
     //Subcategory route
     app.get("/sub-cat", async (req, res) => {
-      console.log(req.query?.subCategory);
+      // console.log(req.query?.subCategory);
 
       let query = {};
       if (req.query?.subCategory) {
@@ -71,10 +73,29 @@ async function run() {
     // Upload toys data
     app.post("/all-toys", async (req, res) => {
       const addToyData = req.body;
-      console.log(addToyData);
+      // console.log(addToyData);
+
+      //countinue
+      // app.patch("/all-toys/:id", (req, res) => {
+      //   const updateToy = req.body;
+      //   // console.log(updateToy);
+      // });
+
+      //delete || not working
+  
 
       //server to db
       const result = await toysCollection.insertOne(addToyData);
+      res.send(result);
+    });
+
+
+    app.delete("/all-toys/:id", async (req, res) => {
+      const delete_id = req.params.id;
+      console.log(delete_id);
+
+      const query = { _id: new ObjectId(delete_id) };
+      const result = await toysCollection.deleteOne(query);
       res.send(result);
     });
 
