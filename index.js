@@ -6,7 +6,7 @@ const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors()); //cors policy
-app.use(express.json()); //req body parser
+app.use(express.json()); //request body parser
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.oc9fgut.mongodb.net/?retryWrites=true&w=majority`;
